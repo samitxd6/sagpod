@@ -4,76 +4,62 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sagpod — Coming Soon</title>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --bg:      #FDF8F2;
-      --sand:    #EDE0CC;
-      --amber:   #F5A623;
-      --orange:  #E8650A;
-      --espresso:#1C1410;
-      --mid:     #6B4F3A;
+      --bg:      #0E0E0E;
+      --surface: #161616;
+      --border:  rgba(255,255,255,0.08);
+      --text:    #F0EDE8;
+      --muted:   rgba(240,237,232,0.38);
+      --amber:   #F5A83A;
+      --orange:  #E96B1A;
+      --white:   #FFFFFF;
     }
 
     html, body {
       height: 100%;
       background: var(--bg);
-      color: var(--espresso);
-      font-family: 'DM Sans', sans-serif;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
       overflow: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Noise texture overlay ── */
-    body::before {
+    /* ── Subtle grain ── */
+    body::after {
       content: '';
       position: fixed; inset: 0; z-index: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-      background-size: 180px 180px;
-      opacity: .03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px;
+      opacity: .025;
       pointer-events: none;
     }
 
-    /* ── Warm light blob ── */
-    .blob {
+    /* ── Warm glow — very subtle, just a kiss of warmth ── */
+    .glow {
       position: fixed;
-      width: 680px; height: 680px;
+      width: 560px; height: 560px;
       border-radius: 50%;
-      background: radial-gradient(circle at 40% 45%,
-        rgba(245,166,35,.55) 0%,
-        rgba(232,101,10,.32) 38%,
-        rgba(253,248,242,0) 70%);
+      background: radial-gradient(circle,
+        rgba(245,168,58,.09) 0%,
+        rgba(233,107,26,.05) 45%,
+        transparent 72%);
       top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      filter: blur(18px);
+      transform: translate(-50%, -58%);
+      filter: blur(40px);
       z-index: 1;
-      animation: breathe 7s ease-in-out infinite;
+      pointer-events: none;
+      animation: glow-pulse 8s ease-in-out infinite;
+    }
+    @keyframes glow-pulse {
+      0%,100% { opacity: .8; transform: translate(-50%,-58%) scale(1); }
+      50%      { opacity: 1;  transform: translate(-50%,-58%) scale(1.06); }
     }
 
-    @keyframes breathe {
-      0%,100% { transform: translate(-50%,-50%) scale(1);   opacity: .9; }
-      50%      { transform: translate(-50%,-50%) scale(1.08); opacity: 1; }
-    }
-
-    /* ── Soft circle ring accent ── */
-    .ring {
-      position: fixed;
-      width: 520px; height: 520px;
-      border-radius: 50%;
-      border: 1.5px solid rgba(245,166,35,.18);
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 1;
-      animation: breathe 7s ease-in-out infinite reverse;
-    }
-    .ring-2 {
-      width: 720px; height: 720px;
-      border-color: rgba(232,101,10,.1);
-      animation-duration: 10s;
-    }
-
-    /* ── Main layout ── */
+    /* ── Layout ── */
     .scene {
       position: relative; z-index: 2;
       display: flex; flex-direction: column;
@@ -81,205 +67,176 @@
       height: 100vh;
       padding: 2rem;
       text-align: center;
-      gap: 0;
+      user-select: none;
     }
 
-    /* ── Logo / Brand ── */
+    /* ── Brand mark ── */
     .brand {
-      display: flex; align-items: center; gap: .6rem;
-      margin-bottom: 3.5rem;
-      animation: riseIn .7s cubic-bezier(.22,1,.36,1) both;
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 56px;
+      animation: up .65s cubic-bezier(.22,1,.36,1) both;
     }
 
-    .brand-dot {
-      width: 10px; height: 10px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--amber), var(--orange));
-      box-shadow: 0 0 12px rgba(245,166,35,.6);
+    /* tiny amber square — simple, not fussy */
+    .brand-mark {
+      width: 8px; height: 8px;
+      background: var(--amber);
+      border-radius: 2px;
+      box-shadow: 0 0 10px rgba(245,168,58,.55);
     }
 
     .brand-name {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 500;
-      font-size: .85rem;
-      letter-spacing: .25em;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: .78rem;
+      letter-spacing: .22em;
       text-transform: uppercase;
-      color: var(--mid);
+      color: var(--muted);
     }
 
-    /* ── "Coming Soon" headline ── */
+    /* ── Headline ── */
     .headline {
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: 'Syne', sans-serif;
       font-weight: 800;
-      font-size: clamp(3.2rem, 10vw, 7.5rem);
-      line-height: 1.0;
+      font-size: clamp(3.8rem, 12vw, 9rem);
+      line-height: .96;
       letter-spacing: -.04em;
-      color: var(--espresso);
-      margin-bottom: 1.6rem;
-      animation: riseIn .85s cubic-bezier(.22,1,.36,1) .1s both;
-      position: relative;
+      color: var(--text);
+      margin-bottom: 28px;
+      animation: up .75s cubic-bezier(.22,1,.36,1) .08s both;
     }
 
-    /* "Soon" word — amber gradient fill */
-    .headline .word-soon {
-      position: relative;
-      display: inline-block;
-      background: linear-gradient(110deg, var(--amber) 0%, var(--orange) 100%);
+    /* "Soon" gets the warm accent */
+    .headline .accent {
+      display: block;
+      background: linear-gradient(100deg, var(--amber) 0%, var(--orange) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    /* Warm underline accent on "Soon" */
-    .headline .word-soon::after {
-      content: '';
-      position: absolute;
-      left: 0; bottom: .04em;
-      width: 100%; height: .06em;
-      background: linear-gradient(90deg, var(--amber), var(--orange));
-      border-radius: 999px;
-      transform-origin: left;
-      animation: underline-grow .9s cubic-bezier(.22,1,.36,1) .6s both;
-    }
-    @keyframes underline-grow {
-      from { transform: scaleX(0); opacity: 0; }
-      to   { transform: scaleX(1); opacity: 1; }
-    }
-
-    /* ── Sub copy ── */
-    .sub {
-      font-size: clamp(.9rem, 2vw, 1.05rem);
-      color: var(--mid);
-      font-weight: 300;
-      line-height: 1.75;
-      max-width: 400px;
-      margin-bottom: 3.2rem;
-      animation: riseIn .9s cubic-bezier(.22,1,.36,1) .22s both;
-    }
-
-    /* ── Divider ── */
+    /* ── Thin divider ── */
     .divider {
-      width: 40px; height: 1.5px;
+      width: 32px; height: 1px;
       background: linear-gradient(90deg, var(--amber), var(--orange));
       border-radius: 999px;
-      margin: 0 auto 3.2rem;
-      animation: riseIn .9s .18s both;
+      margin: 0 auto 28px;
+      opacity: .7;
+      animation: up .8s .16s both;
+    }
+
+    /* ── Description ── */
+    .desc {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(.82rem, 2vw, .95rem);
+      font-weight: 400;
+      color: var(--muted);
+      letter-spacing: .04em;
+      margin-bottom: 44px;
+      animation: up .85s .2s both;
     }
 
     /* ── Telegram button ── */
     .tg-btn {
-      display: inline-flex; align-items: center; gap: .7rem;
-      padding: .85rem 2rem;
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 13px 26px;
       background: transparent;
-      border: 1.5px solid var(--espresso);
+      border: 1.5px solid rgba(240,237,232,0.28);
       border-radius: 999px;
-      color: var(--espresso);
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
       font-weight: 600;
-      font-size: .88rem;
-      letter-spacing: .04em;
+      font-size: .82rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
       text-decoration: none;
       cursor: pointer;
-      position: relative; overflow: hidden;
-      animation: riseIn 1s cubic-bezier(.22,1,.36,1) .35s both;
-      transition: border-width .18s ease, border-color .22s ease, color .22s ease, transform .2s ease, box-shadow .22s ease;
+      animation: up .9s .28s both;
+      transition:
+        border-width .18s ease,
+        border-color .2s ease,
+        color .2s ease,
+        transform .2s ease,
+        box-shadow .2s ease;
     }
 
     .tg-btn:hover {
       border-width: 2.5px;
-      border-color: var(--orange);
-      color: var(--orange);
+      border-color: var(--amber);
+      color: var(--amber);
       transform: translateY(-2px);
-      box-shadow: 0 6px 24px rgba(232,101,10,.15);
-    }
-    .tg-btn:active { transform: translateY(0); }
-
-    .tg-icon { width: 20px; height: 20px; flex-shrink: 0; }
-
-    /* Warm orange dot indicator */
-    .status-dot {
-      display: inline-block;
-      width: 7px; height: 7px; border-radius: 50%;
-      background: var(--amber);
-      box-shadow: 0 0 8px rgba(245,166,35,.8);
-      animation: pulse-dot 2s ease-in-out infinite;
-      margin-right: .1rem;
-    }
-    @keyframes pulse-dot {
-      0%,100% { opacity: 1; transform: scale(1); }
-      50%      { opacity: .5; transform: scale(.7); }
+      box-shadow: 0 0 28px rgba(245,168,58,.12);
     }
 
-    /* ── Corner decorations ── */
+    .tg-btn:active {
+      transform: translateY(0);
+    }
+
+    .tg-icon {
+      width: 18px; height: 18px; flex-shrink: 0;
+      transition: opacity .2s;
+    }
+
+    /* ── Corner brackets ── */
     .corner {
       position: fixed;
-      width: 60px; height: 60px;
-      border-color: rgba(245,166,35,.22);
+      width: 48px; height: 48px;
+      border-color: rgba(255,255,255,.07);
       border-style: solid;
       z-index: 2;
       pointer-events: none;
       opacity: 0;
-      animation: fadeCorner .8s ease .8s forwards;
+      animation: fade-in .6s ease 1s forwards;
     }
-    .corner-tl { top: 28px; left: 28px; border-width: 1.5px 0 0 1.5px; border-radius: 4px 0 0 0; }
-    .corner-tr { top: 28px; right: 28px; border-width: 1.5px 1.5px 0 0; border-radius: 0 4px 0 0; }
-    .corner-bl { bottom: 28px; left: 28px; border-width: 0 0 1.5px 1.5px; border-radius: 0 0 0 4px; }
-    .corner-br { bottom: 28px; right: 28px; border-width: 0 1.5px 1.5px 0; border-radius: 0 0 4px 0; }
-    @keyframes fadeCorner { to { opacity: 1; } }
+    .c-tl { top: 24px; left: 24px;  border-width: 1px 0 0 1px; border-radius: 3px 0 0 0; }
+    .c-tr { top: 24px; right: 24px; border-width: 1px 1px 0 0; border-radius: 0 3px 0 0; }
+    .c-bl { bottom: 24px; left: 24px;  border-width: 0 0 1px 1px; border-radius: 0 0 0 3px; }
+    .c-br { bottom: 24px; right: 24px; border-width: 0 1px 1px 0; border-radius: 0 0 3px 0; }
 
-    /* ── Animations ── */
-    @keyframes riseIn {
-      from { opacity: 0; transform: translateY(20px); }
+    /* ── Keyframes ── */
+    @keyframes up {
+      from { opacity: 0; transform: translateY(18px); }
       to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fade-in {
+      to { opacity: 1; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation: none !important; transition: none !important; }
     }
-
-    @media (max-width: 480px) {
-      .ring, .ring-2 { display: none; }
-      .blob { width: 420px; height: 420px; }
-    }
   </style>
 </head>
 <body>
 
-  <!-- Ambient warm light -->
-  <div class="blob"></div>
-  <div class="ring"></div>
-  <div class="ring ring-2"></div>
+  <div class="glow"></div>
 
-  <!-- Corner marks -->
-  <div class="corner corner-tl"></div>
-  <div class="corner corner-tr"></div>
-  <div class="corner corner-bl"></div>
-  <div class="corner corner-br"></div>
+  <div class="corner c-tl"></div>
+  <div class="corner c-tr"></div>
+  <div class="corner c-bl"></div>
+  <div class="corner c-br"></div>
 
-  <!-- Content -->
   <main class="scene">
 
     <div class="brand">
-      <span class="brand-dot"></span>
+      <span class="brand-mark"></span>
       <span class="brand-name">Sagpod</span>
     </div>
 
     <h1 class="headline">
-      Coming<br><span class="word-soon">Soon</span>
+      Coming<span class="accent">Soon</span>
     </h1>
 
     <div class="divider"></div>
 
-    <p class="sub">
-      Your Sampad Hub.
-    </p>
+    <p class="desc">Your Sampad Hub.</p>
 
-    <a class="tg-btn" href="https://google.com" target="_blank" rel="noopener">
-      <!-- Telegram icon -->
+    <a class="tg-btn" href="https://t.me/sagpod" target="_blank" rel="noopener">
       <svg class="tg-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="12" cy="12" r="12" fill="url(#tg-g)"/>
+        <circle cx="12" cy="12" r="12" fill="url(#tg-grad)"/>
         <path d="M5.2 11.7l12.2-4.7c.6-.2 1.1.1.9.9l-2.1 9.8c-.1.6-.5.8-1 .5l-2.8-2.1-1.3 1.3c-.1.1-.3.2-.6.2l.2-2.9 5.3-4.8c.2-.2 0-.3-.3-.1L7.8 13.6l-2.8-.9c-.6-.2-.6-.6.2-.9z" fill="white"/>
         <defs>
-          <linearGradient id="tg-g" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+          <linearGradient id="tg-grad" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
             <stop offset="0%" stop-color="#40B3E0"/>
             <stop offset="100%" stop-color="#1A8FC2"/>
           </linearGradient>
